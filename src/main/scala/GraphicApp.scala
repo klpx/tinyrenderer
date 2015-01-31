@@ -1,5 +1,6 @@
 import javax.swing._
 import java.awt._
+import tinyrenderer.parsers.WavefrontParser
 
 object GraphicApp extends App {
 	SwingUtilities.invokeLater(new Runnable() {
@@ -38,51 +39,4 @@ class Viewport extends JPanel {
       }
     }
 	} 
-}
-
-class Vertex(val x: Double, val y: Double, val z: Double, val w: Double = 1.0)
-
-class TextureVertex(val u: Double, val v: Double, val w: Double = 0.0)
-
-class ParameterVertex(val u: Double, val v: Double, val w: Double)
-
-class Face(val v1: Vertex, val v2: Vertex, val v3: Vertex) {
-  val edges = Array((v1, v2), (v2, v3), (v3, v1))
-}
-
-object WavefrontParser {
-	import collection.mutable.ArrayBuffer
-	import io.Source
-  import scala.util.parsing.combinator._
-  
-
-//  object Parsers extends RegexParsers {
-//    def doubleNumber: Parser[Double] = """\d+(\.\d*)?""".r ^^ { _.toDouble } 
-//    val vertex: Parser[Vertex] = ("v " ~ doubleNumber ~ " " ~ doubleNumber ~ " " ~ doubleNumber) ^^ {
-//      case "v " ~ x ~ " " ~ y ~ " " ~ z => new Vertex(x, y, z)
-//    }
-//  }
-	private val number = """-?\d+(?:\.\d*)?(?:e[+\-]\d+)?"""
-	private val vertexMatcher = s"""v ($number) ($number) ($number)""".r
-
-	private val faceVerticle = """(\d+)\/\d+\/\d+"""
-	private val faceMatcher = s"""f $faceVerticle $faceVerticle $faceVerticle""".r
-
-	def parse(source: Source): Array[Face] = {
-		val vertexes = new ArrayBuffer[Vertex]()
-    val faces = new ArrayBuffer[Face]()
-    
-    println(vertexMatcher)
-
-		for (line <- source.getLines) line match {
-			case vertexMatcher(x, y, z) => vertexes += new Vertex(x.toDouble, y.toDouble, z.toDouble)
-      case faceMatcher(v1Id, v2Id, v3Id) =>
-        faces += new Face(vertexes(v1Id.toInt - 1), vertexes(v2Id.toInt - 1), vertexes(v3Id.toInt - 1))
-			case _ if line.startsWith("f ") => println(line)
-      case _ =>
-		}
-    println(vertexes.length)
-    
-    faces.toArray
-	}
 }
