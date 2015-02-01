@@ -1,6 +1,7 @@
 package tinyrenderer
 
 import primitives._
+import ColorOps._
 import java.awt.{Graphics, Color, Point}
 
 case class Line(p1: Point, p2: Point) {
@@ -9,6 +10,7 @@ case class Line(p1: Point, p2: Point) {
     
     def getYByX(x: Int) = (a * x + b).round.toInt
 }
+
 
 class Drawer(val g: Graphics, private val width: Int, private val height: Int, private val bgColor: Color = Color.BLACK) {
   object DrawType extends Enumeration {
@@ -32,13 +34,22 @@ class Drawer(val g: Graphics, private val width: Int, private val height: Int, p
       case DrawType.MESH => drawTriangleMesh
       case DrawType.NORMAL => drawTriangleNormal
     }
-    g.setColor(color)
     for (face <- model.faces) {
       val p1 = new Point(normalizeX(face.v1.x), normalizeY(face.v1.y))
       val p2 = new Point(normalizeX(face.v2.x), normalizeY(face.v2.y))
       val p3 = new Point(normalizeX(face.v3.x), normalizeY(face.v3.y))
-      triangleDrawer(p1, p2, p3)
+      var intensity = getLightIntensity(face).toFloat
+      if (intensity > 0) {
+        if(intensity>1.0) intensity=1
+        g.setColor(color * intensity)
+        triangleDrawer(p1, p2, p3)
+      }
     }
+  }
+  
+  def getLightIntensity(face: Face): Double = {
+    val n = (face.v3 - face.v1) ^ (face.v2 - face.v1)
+    n.normalized * Vertex(0, 0, -1)
   }
   
   def drawTriangleMesh(p1: Point, p2: Point, p3: Point) {

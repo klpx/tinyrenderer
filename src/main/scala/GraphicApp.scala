@@ -17,8 +17,8 @@ object GraphicApp extends App {
 }
 
 class Viewport extends JPanel {
-  private val _width = 400
-  private val _height = 400
+  private val _width = 600
+  private val _height = 600
   
 	override def getPreferredSize = new Dimension(_width, _height)
 
