@@ -29,6 +29,6 @@ class Viewport extends JPanel {
     
     val faces = WavefrontParser.parse(io.Source.fromFile("african_head.obj"))
     g.drawString(s"drawing ${faces.length} faces", 10, 20)
-    drawer.drawMesh(new Model(faces), drawer.DrawType.NORMAL, Color.RED)
+    drawer.drawModel(new Model(faces), drawer.DrawType.NORMAL, Color.RED)
 	} 
 }
