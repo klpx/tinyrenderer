@@ -27,8 +27,14 @@ class Viewport extends JPanel {
     
     val drawer = new Drawer(g, _width, _height)
     
+    val parseStartTime = System.currentTimeMillis
     val faces = WavefrontParser.parse(io.Source.fromFile("african_head.obj"))
-    g.drawString(s"drawing ${faces.length} faces", 10, 20)
-    drawer.drawModel(new Model(faces), drawer.DrawType.NORMAL, Color.RED)
+    val drawStartTime = System.currentTimeMillis
+    drawer.drawModel(new Model(faces), drawer.DrawType.NORMAL, Color.GRAY)
+    val finished = System.currentTimeMillis
+    g.setColor(Color.GRAY)
+    g.drawString(s"parsed by ${drawStartTime-parseStartTime}ms", 10, 20)
+    g.drawString(s"${faces.length} faces", 10, 40)
+    g.drawString(s"rendered by ${finished-drawStartTime}ms", 10, 60)
 	} 
 }

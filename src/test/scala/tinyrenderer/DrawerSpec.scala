@@ -49,7 +49,7 @@ class DrawerSpec extends FlatSpec with Matchers {
   
   implicit def tuple2awtPoint(t: (Int, Int)): Point = new Point(t._1, t._2)
   
-  "Drawer mesh" should "draw enclosed triangles" in {
+  "Drawer mesh" should "draw perfect triangles" in {
     testMeshTriangle("mesh-sw-45", (0, 0), (0, 99), (99, 99))
     testMeshTriangle("mesh-se-45", (99, 0), (0, 99), (99, 99))
     testMeshTriangle("mesh-a", (20, 76), (24, 3), (86, 84))
@@ -68,7 +68,7 @@ class DrawerSpec extends FlatSpec with Matchers {
     testMeshTriangle("mesh-a", p3, p2, p1)
   }
   
-  "Drawer normal" should "draw filled triangles" in {
+  "Drawer normal" should "draw perfect filled triangles" in {
     testFilledTriangle("filled-sw-45", (0, 0), (0, 99), (99, 99))
     testFilledTriangle("filled-se-45", (99, 0), (0, 99), (99, 99))
     testFilledTriangle("filled-a", (20, 76), (24, 3), (86, 84))
